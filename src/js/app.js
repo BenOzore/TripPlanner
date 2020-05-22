@@ -17,17 +17,19 @@ destinationForm.onsubmit = e => {
   e.preventDefault();
 }
 
+
+
 function getOrigin(query) {
   fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${mapboxAccessToken}&limit=10&&bbox=-97.325875,49.766204,-96.953987,49.99275`)
   .then(resp => resp.json())
   .then(data => {
     console.log(data)
-    data.features.forEach(element => {
-      let fullAddressOfPlace = element.place_name;
+    data.features.forEach(listItem => {
+      let fullAddressOfPlace = listItem.place_name;
       const mainAddress = fullAddressOfPlace.split(',');
       listOrigin.insertAdjacentHTML('beforeend', `
-      <li data-long="-97.19167" data-lat="49.815176" class="">
-        <div class="name">${element.text}</div>
+      <li data-long="${listItem.center[0]}" data-lat="${listItem.center[1]}" class="">
+        <div class="name">${listItem.text}</div>
         <div>${mainAddress[1]}</div>
       </li>
       `)
@@ -39,12 +41,12 @@ function getDestination(query) {
   fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${mapboxAccessToken}&limit=10&&bbox=-97.325875,49.766204,-96.953987,49.99275`)
     .then(resp => resp.json())
     .then(data => {
-      data.features.forEach(element => {
-        let fullAddressOfPlace = element.place_name;
+      data.features.forEach(listItem => {
+        let fullAddressOfPlace = listItem.place_name;
         const mainAddress = fullAddressOfPlace.split(',');
         destinationOrigin.insertAdjacentHTML('beforeend', `
-      <li data-long="-97.154506" data-lat="49.821786">
-        <div class="name">${element.text}</div>
+      <li data-long="${listItem.center[0]}" data-lat="${listItem.center[1]}">
+        <div class="name">${listItem.text}</div>
         <div>${mainAddress[1]}</div>
       </li>
       `)
