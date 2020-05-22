@@ -11,10 +11,17 @@ originForm.onsubmit = e => {
   e.preventDefault();
 }
 
+destinationForm.onsubmit = e => {
+  const input = e.target.querySelector('input');
+  getDestination(input.value);
+  e.preventDefault();
+}
+
 function getOrigin(query) {
   fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${mapboxAccessToken}&limit=10&&bbox=-97.325875,49.766204,-96.953987,49.99275`)
   .then(resp => resp.json())
   .then(data => {
+    console.log(data)
     data.features.forEach(element => {
       let fullAddressOfPlace = element.place_name;
       const mainAddress = fullAddressOfPlace.split(',');
@@ -26,6 +33,23 @@ function getOrigin(query) {
       `)
     });
   });
+}
+
+function getDestination(query) {
+  fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${mapboxAccessToken}&limit=10&&bbox=-97.325875,49.766204,-96.953987,49.99275`)
+    .then(resp => resp.json())
+    .then(data => {
+      data.features.forEach(element => {
+        let fullAddressOfPlace = element.place_name;
+        const mainAddress = fullAddressOfPlace.split(',');
+        destinationOrigin.insertAdjacentHTML('beforeend', `
+      <li data-long="-97.154506" data-lat="49.821786">
+        <div class="name">${element.text}</div>
+        <div>${mainAddress[1]}</div>
+      </li>
+      `)
+      });
+    });
 }
 
 
