@@ -30,8 +30,7 @@ button.onclick = e => {
 
   if(e.target.nodeName === 'BUTTON') {
     // if() {
-
-    // } 
+    planTrip(originArray[0], originArray[1], destinationArray[0], destinationArray[1])
   }
 }
 
@@ -78,7 +77,7 @@ listOrigin.onclick = e => {
   }
   clickedEle.className = "selected";
   originArray = [];
-  originArray.push(clickedEle.dataset.long, clickedEle.dataset.lat)
+  originArray.push(clickedEle.dataset.lat, clickedEle.dataset.long)
   console.log(originArray)
   return originArray;
 }
@@ -90,11 +89,18 @@ destinationOrigin.onclick = e => {
   }
   clickedEle.className = "selected";
   destinationArray = [];
-  destinationArray.push(clickedEle.dataset.long, clickedEle.dataset.lat)
+  destinationArray.push(clickedEle.dataset.lat, clickedEle.dataset.long)
   console.log(destinationArray);
   return destinationArray;
 }
 
+function planTrip(originLat, originLong, destinationLat, destinationLong) {
+  fetch(`https://api.winnipegtransit.com/v3/trip-planner.json?api-key=${transitApiKey}&origin=geo/${originLat},${originLong}&destination=geo/${destinationLat},${destinationLong}`)
+    .then(resp => resp.json())
+    .then(data => {
+      console.log(data);
+    })
+}
 
 
 
