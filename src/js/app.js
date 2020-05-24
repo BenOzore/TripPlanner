@@ -5,6 +5,7 @@ const listOrigin = document.querySelector(".origins");
 const destinationForm = document.querySelector(".destination-form");
 const destinationOrigin = document.querySelector(".destinations");
 const button = document.querySelector(".plan-trip");
+const myTrip = document.querySelector(".my-trip");
 let originArray = [];
 let destinationArray = [];
 
@@ -78,7 +79,6 @@ listOrigin.onclick = e => {
   clickedEle.className = "selected";
   originArray = [];
   originArray.push(clickedEle.dataset.lat, clickedEle.dataset.long)
-  console.log(originArray)
   return originArray;
 }
 
@@ -90,7 +90,6 @@ destinationOrigin.onclick = e => {
   clickedEle.className = "selected";
   destinationArray = [];
   destinationArray.push(clickedEle.dataset.lat, clickedEle.dataset.long)
-  console.log(destinationArray);
   return destinationArray;
 }
 
@@ -98,9 +97,15 @@ function planTrip(originLat, originLong, destinationLat, destinationLong) {
   fetch(`https://api.winnipegtransit.com/v3/trip-planner.json?api-key=${transitApiKey}&origin=geo/${originLat},${originLong}&destination=geo/${destinationLat},${destinationLong}`)
     .then(resp => resp.json())
     .then(data => {
-      console.log(data);
+      let segment = data.plans[0].segments;
+      
     })
 }
 
+function timeCalculation(start, end) {
+  let startTime = new Date(start);
+  let endTime = new Date(end);
+  return endTime.getMinutes() - startTime.getMinutes();
+}
 
 
