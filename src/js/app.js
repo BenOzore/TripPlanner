@@ -98,8 +98,37 @@ function planTrip(originLat, originLong, destinationLat, destinationLong) {
     .then(resp => resp.json())
     .then(data => {
       let segment = data.plans[0].segments;
-      
+      myTrip.innerHTML = "";
+      myTrip.innerHTML = insertIntoDOM(segment);
     })
+}
+
+function insertIntoDOM(plans) {
+  let html = '';
+  for(let plan of plans) {
+    if (plan.type === "walk") {
+        html += `
+        <li>
+          <i class="fas fa-walking" aria-hidden="true"></i>Walk for ${timeCalculation(plan.times.start, plan.times.end)} minutes
+          to stop #${plan.to.stop.key} - ${plan.to.stop.name}
+        </li >
+        `
+    } else if(plan.type === "ride") {
+      html += `
+      <li>
+        <i class="fas fa-bus" aria-hidden="true"></i>Ride the ${plan.route.name} for ${timeCalculation(plan.times.start, plan.times.end)} minutes.
+      </li>
+      `
+    } else if(plan.type === "transfer") {
+      html += `
+      <li>
+        <i class="fas fa-ticket-alt" aria-hidden="true"></i>Transfer from stop
+        #${plan.from.stop.key} - ${plan.from.stop.name} to stop #${plan.to.stop.key} - ${plan.to.stop.name}
+      </li>
+      `
+    }
+  }
+  return html; 
 }
 
 function timeCalculation(start, end) {
