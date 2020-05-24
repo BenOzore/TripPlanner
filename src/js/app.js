@@ -1,3 +1,4 @@
+//variables
 const mapboxAccessToken = `pk.eyJ1IjoiYmVub3pvcmUiLCJhIjoiY2thNWpqd2F5MDB1dTNvcGc2b2EweDd3aSJ9.492kw13XYr7zZAv0FfkgKw`;
 const transitApiKey = `zqAH1xZnEZviNZHUaz6`;
 const originForm = document.querySelector(".origin-form");
@@ -26,7 +27,7 @@ destinationForm.onsubmit = e => {
   input.value = "";
   e.preventDefault();
 }
-
+//plan button event listener
 button.onclick = e => {
 
   if(e.target.nodeName === 'BUTTON') {
@@ -35,6 +36,7 @@ button.onclick = e => {
   }
 }
 
+//fetch function for origin or start location
 function getOrigin(query) {
   fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${mapboxAccessToken}&limit=10&&bbox=-97.325875,49.766204,-96.953987,49.99275`)
   .then(resp => resp.json())
@@ -52,7 +54,7 @@ function getOrigin(query) {
   });
   listOrigin.innerHTML = "";
 }
-
+//fetch function for destination location
 function getDestination(query) {
   fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${mapboxAccessToken}&limit=10&&bbox=-97.325875,49.766204,-96.953987,49.99275`)
   .then(resp => resp.json())
@@ -71,6 +73,7 @@ function getDestination(query) {
   destinationOrigin.innerHTML = "";
 }
 
+//the list of dropdown tabs of origin locations
 listOrigin.onclick = e => {
   const clickedEle = e.target.closest('li');
   for (let child of listOrigin.children) {
@@ -82,6 +85,7 @@ listOrigin.onclick = e => {
   return originArray;
 }
 
+//the list of dropdown tabs of destination locations
 destinationOrigin.onclick = e => {
   const clickedEle = e.target.closest('li');
   for(let child of destinationOrigin.children) {
@@ -91,6 +95,13 @@ destinationOrigin.onclick = e => {
   destinationArray = [];
   destinationArray.push(clickedEle.dataset.lat, clickedEle.dataset.long)
   return destinationArray;
+}
+
+//converting and calculating the string for time
+function timeCalculation(start, end) {
+  let startTime = new Date(start);
+  let endTime = new Date(end);
+  return endTime.getMinutes() - startTime.getMinutes();
 }
 
 function planTrip(originLat, originLong, destinationLat, destinationLong) {
@@ -131,10 +142,5 @@ function insertIntoDOM(plans) {
   return html; 
 }
 
-function timeCalculation(start, end) {
-  let startTime = new Date(start);
-  let endTime = new Date(end);
-  return endTime.getMinutes() - startTime.getMinutes();
-}
 
 
